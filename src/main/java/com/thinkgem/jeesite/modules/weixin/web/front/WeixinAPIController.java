@@ -6,13 +6,11 @@ package com.thinkgem.jeesite.modules.weixin.web.front;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.cms.utils.WiexinSignUtil;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinAPIService;
+import com.thinkgem.jeesite.modules.weixin.vo.ReceiveMsgPlain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,9 +52,30 @@ public class WeixinAPIController extends BaseController {
 		return "-1";
 	}
 
+//	@RequestMapping(value = "", method = RequestMethod.POST)
+//	@ResponseBody
+//	public String post(String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
+//		System.out.println("=============================================== post start");
+//		for (Object o : request.getParameterMap().keySet()){
+//			System.out.println(o + " = " + request.getParameter((String)o));
+//		}
+//		System.out.println("=============================================== post end");
+//		StringBuilder result = new StringBuilder();
+//		result.append("<xml>" +
+//				"<ToUserName><![CDATA[toUser]]></ToUserName>" +
+//				"<FromUserName><![CDATA[fromUser]]></FromUserName>" +
+//				"<CreateTime>12345678</CreateTime>" +
+//				"<MsgType><![CDATA[text]]></MsgType>" +
+//				"<Content><![CDATA[你好]]></Content>" +
+//				"</xml>");
+//		return result.toString();
+//	}
+
+
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
-	public String post(String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
+	public String post(@RequestBody ReceiveMsgPlain requestBody, String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
+		System.out.println("body="+requestBody);
 		System.out.println("=============================================== post start");
 		for (Object o : request.getParameterMap().keySet()){
 			System.out.println(o + " = " + request.getParameter((String)o));
@@ -73,13 +92,12 @@ public class WeixinAPIController extends BaseController {
 		return result.toString();
 	}
 
-//	@RequestMapping(value = "access_token", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String getAccessToken(){
-//		return weixinAPIService.getOrNewToken();
-//
-//	}
+	@RequestMapping(value = "access_token", method = RequestMethod.GET)
+	@ResponseBody
+	public String getAccessToken(){
+		return weixinAPIService.getOrNewToken();
 
+	}
 
 	/**
 	 * 获取openid的第一步,跳转操作

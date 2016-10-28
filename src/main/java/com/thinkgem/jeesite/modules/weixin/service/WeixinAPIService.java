@@ -42,9 +42,6 @@ public class WeixinAPIService {
     @Value("#{APP_PROP['config.weixin.openId.request.url']}")
     private String REQUEST_OPEN_ID_REQUEST_URL;
 
-
-
-
     public String getOrNewToken() {
         String access_token = "-1";
         access_token = (String) CacheUtils.get("weixinAccessTokenCache","access_token");

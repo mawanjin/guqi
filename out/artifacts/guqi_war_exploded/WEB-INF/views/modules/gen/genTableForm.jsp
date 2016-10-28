@@ -87,7 +87,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">说明:</label>
-                    <div class="controls">
+                    <div class="controls ">
                         <form:input path="comments" htmlEscape="false" maxlength="200" class="form-control required"/>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                         <thead>
                         <tr>
                             <td title="数据库字段名">列名</td>
-                            <td title="默认读取数据库字段备注">说明</td>
+                            <td title="默认读取数据库字段备注" width="10%">说明</td>
                             <td title="数据库中设置的字段类型及长度">物理类型</td>
                             <td style="width: 10%" title="实体对象的属性字段类型">Java类型</td>
                             <td style="width: 10%"
@@ -160,7 +160,7 @@
                                 <td>
                                     <input  type="text" name="columnList[${vs.index}].comments"
                                            value="${column.comments}" maxlength="200" class="form-control required"
-                                           style="width:50px;"/>
+                                           style="width:150px;"/>
                                 </td>
                                 <td nowrap>
                                     <input type="hidden" name="columnList[${vs.index}].jdbcType"

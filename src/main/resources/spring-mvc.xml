@@ -45,11 +45,19 @@
 				                <value>com.thinkgem.jeesite.common.supcan.treelist.TreeList</value>
 				                <value>com.thinkgem.jeesite.common.supcan.treelist.cols.Col</value>
 				                <value>com.thinkgem.jeesite.common.supcan.treelist.cols.Group</value>
+				                <value>com.thinkgem.jeesite.modules.weixin.vo.ReceiveMsgPlain</value>
 				            </list>
 				        </property>
 				    </bean>
 		        </constructor-arg>
-		        <property name="supportedMediaTypes" value="application/xml"></property>
+
+		        <property name="supportedMediaTypes">
+					<list>
+						<value>application/xml</value>
+						<value>text/xml</value>
+					</list>
+				</property>
+
 			</bean>
 		</mvc:message-converters>
 		<!--<mvc:argument-resolvers>-->

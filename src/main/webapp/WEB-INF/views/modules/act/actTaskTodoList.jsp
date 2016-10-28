@@ -49,14 +49,14 @@
 
             <div class="col-sm-4">
                 <input id="beginDate" name="beginDate" type="text" readonly="readonly" maxlength="20"
-                       class="form-control Wdate"
+                       class="form-control"
                        value="<fmt:formatDate value="${act.beginDate}" pattern="yyyy-MM-dd"/>"
                        onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"/>
             </div>
             <span class="col-sm-1">-</span>
             <div class="col-sm-4">
                 <input id="endDate" name="endDate" type="text" readonly="readonly" maxlength="20"
-                       class="form-control Wdate"
+                       class="form-control"
                        value="<fmt:formatDate value="${act.endDate}" pattern="yyyy-MM-dd"/>"
                        onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});"/>
             </div>

@@ -41,11 +41,14 @@
 			    </div>
             </div>
 			<div class="form-group col-sm-4">
-                <label class="col-sm-4 control-label">发送时间：</label>
+                <label class="col-sm-4 control-label">创建时间：</label>
                 <div class="col-sm-8">
-				<input name="createTime" type="text" readonly="readonly" maxlength="20" class="form-control "
-					value="<fmt:formatDate value="${weixinMsg.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+				<input name="beginCreateTime" type="text" readonly="readonly" maxlength="20" class="form-control"
+					value="<fmt:formatDate value="${weixinMsg.beginCreateTime}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/> -
+				<input name="endCreateTime" type="text" readonly="readonly" maxlength="20" class="form-control"
+					value="<fmt:formatDate value="${weixinMsg.endCreateTime}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:true});"/>
 			    </div>
             </div>
 			<div class="form-group col-sm-4">
@@ -58,7 +61,7 @@
 			    </div>
             </div>
 			<div class="form-group col-sm-4">
-                <label class="col-sm-4 control-label">链接标题：</label>
+                <label class="col-sm-4 control-label">消息标题：</label>
                 <div class="col-sm-8">
 				<form:input path="title" htmlEscape="false" maxlength="55" class="form-control"/>
 			    </div>
@@ -71,13 +74,13 @@
 	<table id="contentTable" style="margin-top: 10px" class="table table-hover">
 		<thead>
 			<tr>
-				<th>id</td>
 				<th>接收方</td>
 				<th>发送方</td>
-				<th>发送时间</td>
+				<th>创建时间</td>
 				<th>消息类型</td>
-				<th>消息内容</td>
-				<th>链接标题</td>
+				<th>文本消息内容</td>
+				<th>消息id</td>
+				<th>消息标题</td>
 				<shiro:hasPermission name="weixin:weixinMsg:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -85,22 +88,22 @@
 		<c:forEach items="${page.list}" var="weixinMsg">
 			<tr>
 				<td><a href="${ctx}/weixin/weixinMsg/form?id=${weixinMsg.id}">
-					${weixinMsg.id}
-				</a></td>
-				<td>
 					${weixinMsg.toUserName}
-				</td>
+				</a></td>
 				<td>
 					${weixinMsg.fromUserName}
 				</td>
 				<td>
-					${weixinMsg.createTime}
+					<fmt:formatDate value="${weixinMsg.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
 					${fns:getDictLabel(weixinMsg.msgType, 'weixin_msg_type', '')}
 				</td>
 				<td>
 					${weixinMsg.content}
+				</td>
+				<td>
+					${weixinMsg.msgId}
 				</td>
 				<td>
 					${weixinMsg.title}

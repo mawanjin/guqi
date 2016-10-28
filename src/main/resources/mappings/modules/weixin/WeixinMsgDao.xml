@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weixin.dao.WeixinMsgDao">
+    
+	<sql id="weixinMsgColumns">
+		a.id AS "id",
+		a.to_user_name AS "toUserName",
+		a.from_user_name AS "fromUserName",
+		a.create_time AS "createTime",
+		a.msg_type AS "msgType",
+		a.content AS "content",
+		a.msg_id AS "msgId",
+		a.pic_url AS "picUrl",
+		a.media_id AS "mediaId",
+		a.format AS "format",
+		a.location_x AS "locationX",
+		a.location_y AS "locationY",
+		a.scale AS "scale",
+		a.label AS "label",
+		a.title AS "title",
+		a.description AS "description",
+		a.url AS "url",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="weixinMsgJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinMsg">
+		SELECT 
+			<include refid="weixinMsgColumns"/>
+		FROM weixin_msg a
+		<include refid="weixinMsgJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinMsg">
+		SELECT 
+			<include refid="weixinMsgColumns"/>
+		FROM weixin_msg a
+		<include refid="weixinMsgJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="toUserName != null and toUserName != ''">
+				AND a.to_user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{toUserName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{toUserName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{toUserName},'%')</if>
+			</if>
+			<if test="fromUserName != null and fromUserName != ''">
+				AND a.from_user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{fromUserName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{fromUserName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{fromUserName},'%')</if>
+			</if>
+			<if test="beginCreateTime != null and endCreateTime != null and beginCreateTime != '' and endCreateTime != ''">
+				AND a.create_time BETWEEN #{beginCreateTime} AND #{endCreateTime}
+			</if>
+			<if test="msgType != null and msgType != ''">
+				AND a.msg_type = #{msgType}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinMsg">
+		SELECT 
+			<include refid="weixinMsgColumns"/>
+		FROM weixin_msg a
+		<include refid="weixinMsgJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_msg(
+			id,
+			to_user_name,
+			from_user_name,
+			create_time,
+			msg_type,
+			content,
+			msg_id,
+			pic_url,
+			media_id,
+			format,
+			location_x,
+			location_y,
+			scale,
+			label,
+			title,
+			description,
+			url,
+			del_flag
+		) VALUES (
+			#{id},
+			#{toUserName},
+			#{fromUserName},
+			#{createTime},
+			#{msgType},
+			#{content},
+			#{msgId},
+			#{picUrl},
+			#{mediaId},
+			#{format},
+			#{locationX},
+			#{locationY},
+			#{scale},
+			#{label},
+			#{title},
+			#{description},
+			#{url},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_msg SET 	
+			to_user_name = #{toUserName},
+			from_user_name = #{fromUserName},
+			create_time = #{createTime},
+			msg_type = #{msgType},
+			content = #{content},
+			msg_id = #{msgId},
+			pic_url = #{picUrl},
+			media_id = #{mediaId},
+			format = #{format},
+			location_x = #{locationX},
+			location_y = #{locationY},
+			scale = #{scale},
+			label = #{label},
+			title = #{title},
+			description = #{description},
+			url = #{url}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE weixin_msg SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

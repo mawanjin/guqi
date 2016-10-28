@@ -5,7 +5,9 @@ package com.thinkgem.jeesite.modules.weixin.web.front;
 
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.cms.utils.WiexinSignUtil;
+import com.thinkgem.jeesite.modules.weixin.entity.WeixinMsg;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinAPIService;
+import com.thinkgem.jeesite.modules.weixin.service.WeixinMsgService;
 import com.thinkgem.jeesite.modules.weixin.vo.ReceiveMsgPlain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,9 @@ public class WeixinAPIController extends BaseController {
 
 	@Autowired
 	WeixinAPIService weixinAPIService;
+
+	@Autowired
+	WeixinMsgService weixinMsgService;
 
 	/**
 	 * 
@@ -75,6 +80,7 @@ public class WeixinAPIController extends BaseController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public String post(@RequestBody ReceiveMsgPlain requestBody, String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
+		weixinMsgService.save(requestBody);
 		System.out.println("body="+requestBody);
 		System.out.println("=============================================== post start");
 		for (Object o : request.getParameterMap().keySet()){

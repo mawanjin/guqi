@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">发送时间：</label>
+			<label class="control-label">创建时间：</label>
 			<div class="controls">
 				<input name="createTime" type="text" readonly="readonly" maxlength="20" class="form-control  "
 					value="<fmt:formatDate value="${weixinMsg.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
@@ -65,7 +65,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">消息内容：</label>
+			<label class="control-label">文本消息内容：</label>
 			<div class="controls">
 				<form:textarea path="content" htmlEscape="false" rows="4" maxlength="255" class="form-control "/>
 			</div>
@@ -73,7 +73,7 @@
 		<div class="form-group">
 			<label class="control-label">消息id：</label>
 			<div class="controls">
-				<form:input path="msgId" htmlEscape="false" maxlength="11" class="form-control "/>
+				<form:input path="msgId" htmlEscape="false" maxlength="100" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-group">
@@ -83,7 +83,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">媒体编号：</label>
+			<label class="control-label">图片媒体id：</label>
 			<div class="controls">
 				<form:input path="mediaId" htmlEscape="false" maxlength="45" class="form-control "/>
 			</div>
@@ -113,19 +113,19 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">地理位置信息：</label>
+			<label class="control-label">位置信息：</label>
 			<div class="controls">
 				<form:input path="label" htmlEscape="false" maxlength="255" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">链接标题：</label>
+			<label class="control-label">消息标题：</label>
 			<div class="controls">
 				<form:input path="title" htmlEscape="false" maxlength="55" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">链接描述：</label>
+			<label class="control-label">消息描述：</label>
 			<div class="controls">
 				<form:input path="description" htmlEscape="false" maxlength="255" class="form-control "/>
 			</div>

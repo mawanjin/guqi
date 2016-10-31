@@ -109,6 +109,11 @@
 					${weixinMsg.title}
 				</td>
 				<shiro:hasPermission name="weixin:weixinMsg:edit"><td>
+					<c:if test="${weixinMsg.msgType eq 'voice' || weixinMsg.msgType eq 'shortvideo'  }">
+						<a href="${ctxFront}/weixin_api/getMedia?mediaId=${weixinMsg.mediaId}" target="_blank" >下载</a>
+					</c:if>
+
+
     				<a href="${ctx}/weixin/weixinMsg/form?id=${weixinMsg.id}">修改</a>
 					<a href="${ctx}/weixin/weixinMsg/delete?id=${weixinMsg.id}" onclick="return confirmx('确认要删除该消息吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weixin.dao.WeixinSubscriberDao">
+    
+	<sql id="weixinSubscriberColumns">
+		a.id AS "id",
+		a.to_user_name AS "toUserName",
+		a.from_user_name AS "fromUserName",
+		a.create_time AS "createTime"
+	</sql>
+	
+	<sql id="weixinSubscriberJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinSubscriber">
+		SELECT 
+			<include refid="weixinSubscriberColumns"/>
+		FROM weixin_subscriber a
+		<include refid="weixinSubscriberJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinSubscriber">
+		SELECT 
+			<include refid="weixinSubscriberColumns"/>
+		FROM weixin_subscriber a
+		<include refid="weixinSubscriberJoins"/>
+		<where>
+			
+			<if test="fromUserName != null and fromUserName != ''">
+				AND a.from_user_name = #{fromUserName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinSubscriber">
+		SELECT 
+			<include refid="weixinSubscriberColumns"/>
+		FROM weixin_subscriber a
+		<include refid="weixinSubscriberJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_subscriber(
+			id,
+			to_user_name,
+			from_user_name,
+			create_time
+		) VALUES (
+			#{id},
+			#{toUserName},
+			#{fromUserName},
+			#{createTime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_subscriber SET 	
+			to_user_name = #{toUserName},
+			from_user_name = #{fromUserName},
+			create_time = #{createTime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM weixin_subscriber
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

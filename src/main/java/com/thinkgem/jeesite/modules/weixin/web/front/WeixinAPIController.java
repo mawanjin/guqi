@@ -8,6 +8,7 @@ import com.thinkgem.jeesite.modules.cms.utils.WiexinSignUtil;
 import com.thinkgem.jeesite.modules.weixin.entity.WeixinMsg;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinAPIService;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinMsgService;
+import com.thinkgem.jeesite.modules.weixin.service.WeixinSubscriberService;
 import com.thinkgem.jeesite.modules.weixin.vo.ReceiveMsgPlain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class WeixinAPIController extends BaseController {
 
 	@Autowired
 	WeixinMsgService weixinMsgService;
+
+	@Autowired
+	WeixinSubscriberService weixinSubscriberService;
 
 	/**
 	 * 
@@ -79,9 +83,14 @@ public class WeixinAPIController extends BaseController {
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
-	public String post(@RequestBody ReceiveMsgPlain requestBody, String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
-		weixinMsgService.save(requestBody);
-		System.out.println("body="+requestBody);
+	public String post(@RequestBody ReceiveMsgPlain receiveMsg, String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
+		if(receiveMsg.getMsgType()!=null&&receiveMsg.getMsgType().equals("event")){
+			weixinSubscriberService.save(receiveMsg);
+		}else {
+			weixinMsgService.save(receiveMsg);
+		}
+
+		System.out.println("body="+receiveMsg);
 		System.out.println("=============================================== post start");
 		for (Object o : request.getParameterMap().keySet()){
 			System.out.println(o + " = " + request.getParameter((String)o));
@@ -127,9 +136,18 @@ public class WeixinAPIController extends BaseController {
 		}
 
 		return weixinAPIService.getOpenIdByCode(code);
-
 	}
 
+
+	/**
+	 * 下载图片/音频/视频
+     * @return
+     */
+	@RequestMapping(value = "getMedia", method = RequestMethod.GET)
+	public String getMedia(@RequestParam(value = "mediaId",required = true) String mediaId){
+		String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="+weixinAPIService.getOrNewToken()+"&media_id="+mediaId;
+		return "redirect:"+url ;
+	}
 
 
 }

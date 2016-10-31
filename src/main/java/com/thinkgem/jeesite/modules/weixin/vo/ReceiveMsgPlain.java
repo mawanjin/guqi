@@ -22,6 +22,7 @@ public class ReceiveMsgPlain {
 
     //语音消息
     private String Format;
+    private String Recognition;
 
     //视频消息
     private String ThumbMediaId;
@@ -36,6 +37,10 @@ public class ReceiveMsgPlain {
     private String Title;
     private String Description;
     private String Url;
+
+    //事件消息
+    private String Event;
+    private String EventKey;
 
 
     public String getToUserName() {
@@ -172,5 +177,29 @@ public class ReceiveMsgPlain {
 
     public void setUrl(String url) {
         Url = url;
+    }
+
+    public String getRecognition() {
+        return Recognition;
+    }
+
+    public void setRecognition(String recognition) {
+        Recognition = recognition;
+    }
+
+    public String getEvent() {
+        return Event;
+    }
+
+    public void setEvent(String event) {
+        Event = event;
+    }
+
+    public String getEventKey() {
+        return EventKey;
+    }
+
+    public void setEventKey(String eventKey) {
+        EventKey = eventKey;
     }
 }

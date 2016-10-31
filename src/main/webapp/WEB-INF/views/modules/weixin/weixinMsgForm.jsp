@@ -83,7 +83,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">图片媒体id：</label>
+			<label class="control-label">媒体id：</label>
 			<div class="controls">
 				<form:input path="mediaId" htmlEscape="false" maxlength="45" class="form-control "/>
 			</div>

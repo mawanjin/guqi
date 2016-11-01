@@ -42,6 +42,9 @@ public class ReceiveMsgPlain {
     private String Event;
     private String EventKey;
 
+    private String KfAccount;//客服帐号
+    private String FromKfAccount;//转接会话
+    private String ToKfAccount;//转接会话
 
     public String getToUserName() {
         return ToUserName;
@@ -201,5 +204,29 @@ public class ReceiveMsgPlain {
 
     public void setEventKey(String eventKey) {
         EventKey = eventKey;
+    }
+
+    public String getKfAccount() {
+        return KfAccount;
+    }
+
+    public void setKfAccount(String kfAccount) {
+        KfAccount = kfAccount;
+    }
+
+    public String getFromKfAccount() {
+        return FromKfAccount;
+    }
+
+    public void setFromKfAccount(String fromKfAccount) {
+        FromKfAccount = fromKfAccount;
+    }
+
+    public String getToKfAccount() {
+        return ToKfAccount;
+    }
+
+    public void setToKfAccount(String toKfAccount) {
+        ToKfAccount = toKfAccount;
     }
 }

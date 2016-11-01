@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weixin.dao.WeixinCustomDao">
+    
+	<sql id="weixinCustomColumns">
+		a.id AS "id",
+		a.kf_nick AS "kfNick",
+		a.kf_account AS "kfAccount",
+		a.kf_id AS "kfId",
+		a.kf_headimgurl AS "kfHeadimgurl",
+		a.del_flag AS "delFlag",
+		a.create_time AS "createTime",
+		a.status AS "status",
+		a.auto_accept AS "autoAccept",
+		a.accepted_case AS "acceptedCase"
+	</sql>
+	
+	<sql id="weixinCustomJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinCustom">
+		SELECT 
+			<include refid="weixinCustomColumns"/>
+		FROM weixin_custom a
+		<include refid="weixinCustomJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinCustom">
+		SELECT 
+			<include refid="weixinCustomColumns"/>
+		FROM weixin_custom a
+		<include refid="weixinCustomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="kfNick != null and kfNick != ''">
+				AND a.kf_nick LIKE 
+					<if test="dbName == 'oracle'">'%'||#{kfNick}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{kfNick}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{kfNick},'%')</if>
+			</if>
+			<if test="kfAccount != null and kfAccount != ''">
+				AND a.kf_account = #{kfAccount}
+			</if>
+			<if test="kfId != null and kfId != ''">
+				AND a.kf_id = #{kfId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findListByKFAccount" resultType="WeixinCustom">
+		SELECT
+			<include refid="weixinCustomColumns"/>
+		FROM weixin_custom a
+		<include refid="weixinCustomJoins"/>
+		<where>
+			a.del_flag = 0
+			AND
+			a.kf_account = #{kfAccount}
+		</where>
+
+	</select>
+	
+	<select id="findAllList" resultType="WeixinCustom">
+		SELECT 
+			<include refid="weixinCustomColumns"/>
+		FROM weixin_custom a
+		<include refid="weixinCustomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_custom(
+			id,
+			kf_nick,
+			kf_account,
+			kf_id,
+			kf_headimgurl,
+			del_flag,
+			create_time,
+			password,
+			status,
+			auto_accept,
+			accepted_case
+		) VALUES (
+			#{id},
+			#{kfNick},
+			#{kfAccount},
+			#{kfId},
+			#{kfHeadimgurl},
+			#{delFlag},
+			#{createTime},
+			#{password},
+			#{status},
+			#{autoAccept},
+			#{acceptedCase},
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_custom SET 	
+			kf_nick = #{kfNick},
+			kf_account = #{kfAccount},
+			kf_id = #{kfId},
+			kf_headimgurl = #{kfHeadimgurl},
+			create_time = #{createTime},
+			status = #{status},
+			auto_accept = #{autoAccept},
+			accepted_case = #{acceptedCase}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE weixin_custom SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteAll">
+		UPDATE weixin_custom SET
+			del_flag = #{DEL_FLAG_DELETE}
+	</update>
+	
+</mapper>

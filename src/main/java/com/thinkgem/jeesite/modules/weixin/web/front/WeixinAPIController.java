@@ -85,7 +85,16 @@ public class WeixinAPIController extends BaseController {
 	@ResponseBody
 	public String post(@RequestBody ReceiveMsgPlain receiveMsg, String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) {
 		if(receiveMsg.getMsgType()!=null&&receiveMsg.getMsgType().equals("event")){
-			weixinSubscriberService.save(receiveMsg);
+			if(receiveMsg.getEvent().equals("subscribe")){//关注/取消关注事件
+				weixinSubscriberService.save(receiveMsg);
+			}else if(receiveMsg.getEvent().equals("kf_create_session")){//接入会话事件
+
+			}else if(receiveMsg.getEvent().equals("kf_close_session")){//关闭会话事件
+
+			}else if(receiveMsg.getEvent().equals("kf_switch_session")){//关闭会话事件
+
+			}
+
 		}else {
 			weixinMsgService.save(receiveMsg);
 		}
@@ -134,7 +143,6 @@ public class WeixinAPIController extends BaseController {
 		if(code.equals("123")){
 			return weixinAPIService.getOpenIdByCode("0018gDcC1P4jm00twNeC1tuBcC18gDcD");
 		}
-
 		return weixinAPIService.getOpenIdByCode(code);
 	}
 
@@ -148,6 +156,5 @@ public class WeixinAPIController extends BaseController {
 		String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="+weixinAPIService.getOrNewToken()+"&media_id="+mediaId;
 		return "redirect:"+url ;
 	}
-
 
 }

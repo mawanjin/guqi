@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.common.service;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.weixin.exception.WeiXinException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +60,7 @@ public abstract class CrudService<D extends CrudDao<T>, T extends DataEntity<T>>
 	 * @param entity
 	 * @return
 	 */
-	public Page<T> findPage(Page<T> page, T entity) {
+	public Page<T> findPage(Page<T> page, T entity)  {
 		entity.setPage(page);
 		page.setList(dao.findList(entity));
 		return page;

@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.cms.service;
 
+import com.thinkgem.jeesite.modules.weixin.exception.WeiXinException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -15,8 +15,12 @@ import org.springframework.web.client.RestTemplate;
 public class WeixinHttpCore {
 
     RestTemplate restTemplate = new RestTemplate();
+
     @Value("#{APP_PROP['config.weixin.custom']}")
     String weixinCustomHost;
+
+    @Value("#{APP_PROP['config.weixin.menu']}")
+    String weixinMenuHost;
 
     /**
      * 获取客服人员信息列表
@@ -188,5 +192,34 @@ public class WeixinHttpCore {
         return rep;
     }
 
+    /**
+     * 创建菜单
+     * @param accessToken
+     * @param menus
+     * @return
+     */
+    public String menuCreate(String accessToken,String menus){
+        String url = weixinMenuHost+"/menu/create?access_token="+accessToken;
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+        headers.setContentType(type);
+        headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+        HttpEntity<String> formEntity = new HttpEntity<String>(menus, headers);
+        String rep = restTemplate.postForObject(url, formEntity, String.class);
+        return rep;
+    }
+
+
+    /**
+     * 获取未接入会话列表
+     * @param accessToken
+     * @return
+     *
+     *
+     */
+    public String getMenu(String accessToken){
+        String url = weixinCustomHost+"/get?access_token="+accessToken;
+        return restTemplate.getForObject(url, String.class);
+    }
 
 }

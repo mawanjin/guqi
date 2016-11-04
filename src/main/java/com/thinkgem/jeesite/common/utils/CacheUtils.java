@@ -18,6 +18,8 @@ public class CacheUtils {
 
 	private static final String SYS_CACHE = "sysCache";
 
+	public static final String Weixin_CACHE_VERIFY_CODE = "weixinCache_key_verify_code";
+
 	/**
 	 * 获取SYS_CACHE缓存
 	 * @param key

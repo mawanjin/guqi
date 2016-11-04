@@ -1,0 +1,10 @@
+.title_bg{
+    background-color: #1E9300;
+    color: white;
+    height: 40px;
+    line-height: 40px;
+}
+
+.weixin_back_btn {
+    position: absolute;top:0px;left:50px;height: 40px; line-height: 40px;color: white;
+}

@@ -3,24 +3,15 @@
  */
 package com.thinkgem.jeesite.modules.cms.web.front;
 
-import com.google.common.collect.Lists;
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.servlet.ValidateCodeServlet;
-import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.cms.entity.*;
-import com.thinkgem.jeesite.modules.cms.service.*;
 import com.thinkgem.jeesite.modules.cms.utils.CmsUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 网站Controller
@@ -38,7 +29,7 @@ public class WeixinFrontController extends BaseController{
 	public String index(Model model) {
 		Site site = CmsUtils.getSite(Site.defaultSiteId());
 		model.addAttribute("isIndex", true);
-		return "modules/weixin/front/themes/weixin/frontIndex";
+		return "modules/weixin/front/weixin/frontIndex";
 	}
 
 	/**
@@ -46,17 +37,40 @@ public class WeixinFrontController extends BaseController{
 	 */
 	@RequestMapping("/verifyIndex")
 	public String verifyCodePage(Model model,@RequestParam(value = "phone",required = true) String phone) {
-
 		model.addAttribute("phone", phone);
-		return "modules/weixin/front/themes/weixin/verifyCodePage";
+		return "modules/weixin/front/weixin/verifyCodePage";
 	}
 
-
+	/**
+	 * 调取短信接口发送验证码给用户
+	 */
 	@RequestMapping(value = "/get_verify_code",produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public String getVerifyCode(@RequestParam(value = "phone",required = true) String phone){
-
+		String code = "1001";
+		CacheUtils.put(CacheUtils.Weixin_CACHE_VERIFY_CODE,code);
 		return "{ \"result\": \"0\", \"code\": \"1001\"}";
+	}
+
+	/**
+	 * 验证验证码
+	 */
+	@RequestMapping("/do_verify_code")
+	public String doVerifyCode(Model model,@RequestParam(value = "phone",required = true) String phone,@RequestParam(value = "verify_code",required = true) String code) {
+		String oCode = CacheUtils.get(CacheUtils.Weixin_CACHE_VERIFY_CODE).toString();
+		if(oCode.equals(code)){//登录成功
+			Session session = UserUtils.getSession();
+			session.setAttribute("login",true);
+		}
+		return "modules/weixin/front/weixin/verifyCodePage";
+	}
+
+	/**
+	 * 协议页面
+	 */
+	@RequestMapping("/user_terms")
+	public String userTerms() {
+		return "modules/weixin/front/weixin/user_terms";
 	}
 
 }

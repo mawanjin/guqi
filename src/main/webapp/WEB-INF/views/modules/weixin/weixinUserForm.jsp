@@ -96,7 +96,7 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label">三证合一1:</label>
+			<label class="control-label">三证合一:</label>
 			<div class="controls">
 				<form:hidden id="nameImage" path="cerFile1" htmlEscape="false" maxlength="255" class="form-control "/>
 				<sys:ckfinder input="nameImage" type="images" uploadPath="/weixin/customer/photo" selectMultiple="true"/>

@@ -5,9 +5,10 @@
 	<title>菜单管理</title>
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/adminlte.jsp" %>
+	<%@include file="/WEB-INF/views/include/treetable.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			
+			$("#contentTable").treeTable({expandLevel: 3});
 		});
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -24,19 +25,9 @@
 	</ul>
 
 	<sys:message content="${message}"/>
-	<form:form id="searchForm" modelAttribute="weixinMenu" action="${ctx}/weixin/weixinMenu/" method="post" class="row form-horizontal well" role="form">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+	<form:form id="searchForm" modelAttribute="weixinMenu" action="${ctx}/weixin/weixinMenu/syn" method="post" class="row form-horizontal well" role="form">
 
-			<div class="form-group col-sm-4">
-                <label class="col-sm-4 control-label">名称：</label>
-                <div class="col-sm-8">
-				<form:input path="name" htmlEscape="false" maxlength="45" class="form-control"/>
-			    </div>
-            </div>
-			<input id="btnSubmit" class="btn btn-primary pull-right" type="submit" value="查询"/>
-
-
+			<input id="btnSubmit" class="btn btn-primary pull-right" type="submit" value="同步"/>
 	</form:form>
 
 	<table id="contentTable" style="margin-top: 10px" class="table table-hover">
@@ -53,7 +44,7 @@
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="weixinMenu">
-			<tr>
+			<tr id="${weixinMenu.id}" pId="${weixinMenu.parent}">
 				<td><a href="${ctx}/weixin/weixinMenu/form?id=${weixinMenu.id}">
 					${weixinMenu.name}
 				</a></td>

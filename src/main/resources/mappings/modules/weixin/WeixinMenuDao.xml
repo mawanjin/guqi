@@ -22,6 +22,14 @@
 		<include refid="weixinMenuJoins"/>
 		WHERE a.id = #{id}
 	</select>
+
+	<select id="getByName" resultType="WeixinMenu">
+		SELECT
+			<include refid="weixinMenuColumns"/>
+		FROM weixin_menu a
+		<include refid="weixinMenuJoins"/>
+		WHERE a.name = #{name}
+	</select>
 	
 	<select id="findList" resultType="WeixinMenu">
 		SELECT 
@@ -109,6 +117,11 @@
 	<update id="delete">
 		DELETE FROM weixin_menu
 		WHERE id = #{id}
+	</update>
+
+	<update id="deleteIncludeChildren">
+		DELETE FROM weixin_menu
+		WHERE id = #{id} or parent = #{id}
 	</update>
 
 	<update id="deleteAll">

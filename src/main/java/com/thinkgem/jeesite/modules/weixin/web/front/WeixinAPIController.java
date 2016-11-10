@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.weixin.web.front;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.cms.utils.WiexinSignUtil;
 import com.thinkgem.jeesite.modules.weixin.entity.WeixinMsg;
+import com.thinkgem.jeesite.modules.weixin.http.WeixinHttpCore;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinAPIService;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinMsgService;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinSubscriberService;
@@ -34,6 +35,9 @@ public class WeixinAPIController extends BaseController {
 
 	@Autowired
 	WeixinSubscriberService weixinSubscriberService;
+
+	@Autowired
+	WeixinHttpCore weixinHttpCore;
 
 	/**
 	 * 
@@ -79,7 +83,6 @@ public class WeixinAPIController extends BaseController {
 //				"</xml>");
 //		return result.toString();
 //	}
-
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
@@ -149,12 +152,49 @@ public class WeixinAPIController extends BaseController {
 
 	/**
 	 * 下载图片/音频/视频
+	 * @param startTime 查询开始时间，UNIX时间戳
+	 * @param
      * @return
      */
-	@RequestMapping(value = "getMedia", method = RequestMethod.GET)
-	public String getMedia(@RequestParam(value = "mediaId",required = true) String mediaId){
-		String url = "http://file.api.weixin.qq.com/cgi-bin/media/get?access_token="+weixinAPIService.getOrNewToken()+"&media_id="+mediaId;
-		return "redirect:"+url ;
+	@RequestMapping(value = "getCustomMsgRecord", method = RequestMethod.GET)
+	@ResponseBody
+	public String getCustomService(@RequestParam(value = "startTime",required = true) String startTime,@RequestParam(value = "endTime",required = true) String endTime,int pageSize,int pageIndex){
+		return weixinHttpCore.getCustomMsgRecord(weixinAPIService.getOrNewToken(),startTime,endTime,pageIndex,pageSize);
 	}
+
+	/**
+	 * 获取模板列表
+	 * @param
+     * @return
+     */
+	@RequestMapping(value = "get_all_template", method = RequestMethod.GET)
+	@ResponseBody
+	public String getAllTemplate(){
+		return weixinHttpCore.getAllPrivateTemplate(weixinAPIService.getOrNewToken());
+	}
+
+
+	/**
+	 * 获取用户信息
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value = "get_user_info", method = RequestMethod.GET)
+	@ResponseBody
+	public String getUserInfoByOpenId(){
+		return weixinHttpCore.getUserInfoByOpenId("oCaAFwCu6_vtb5Bk5fXe4tywWGFI",weixinAPIService.getOrNewToken());
+	}
+
+	/**
+	 * 删除所有菜单
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value = "delete_menu", method = RequestMethod.GET)
+	@ResponseBody
+	public String deleteMenu(){
+		return weixinHttpCore.deleteMenu(weixinAPIService.getOrNewToken());
+	}
+
 
 }

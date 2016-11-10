@@ -6,6 +6,8 @@ package com.thinkgem.jeesite.modules.weixin.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.modules.cms.entity.Category;
 import com.thinkgem.jeesite.modules.weixin.exception.WeiXinException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,10 @@ public class WeixinMenuController extends BaseController {
 					}
 				}
 			}
+
+			List<WeixinMenu> list = Lists.newArrayList();
+			WeixinMenu.sortList(list, page.getList(), "0");
+			page.setList(list);
 			model.addAttribute("page", page);
 		} catch (WeiXinException e) {
 			e.printStackTrace();
@@ -81,7 +87,8 @@ public class WeixinMenuController extends BaseController {
 	@RequiresPermissions("weixin:weixinMenu:view")
 	@RequestMapping(value = "form")
 	public String form(WeixinMenu weixinMenu, Model model) {
-		model.addAttribute("menuSelect",  weixinMenuService.getMenuSelect());
+
+		model.addAttribute("menuSelect",  weixinMenuService.getMenuSelect(weixinMenu.getId()));
 		model.addAttribute("weixinMenu", weixinMenu);
 		return "modules/weixin/weixinMenuForm";
 	}
@@ -92,7 +99,7 @@ public class WeixinMenuController extends BaseController {
 		if (!beanValidator(model, weixinMenu)){
 			return form(weixinMenu, model);
 		}
-		weixinMenuService.save(weixinMenu);
+		weixinMenuService.save(weixinMenu,true);
 		addMessage(redirectAttributes, "保存菜单成功");
 		return "redirect:"+Global.getAdminPath()+"/weixin/weixinMenu/?repage";
 	}
@@ -101,8 +108,22 @@ public class WeixinMenuController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(WeixinMenu weixinMenu, RedirectAttributes redirectAttributes) {
 		weixinMenuService.delete(weixinMenu);
+
 		addMessage(redirectAttributes, "删除菜单成功");
 		return "redirect:"+Global.getAdminPath()+"/weixin/weixinMenu/?repage";
 	}
+
+
+	@RequestMapping(value = "syn")
+	public String syn(RedirectAttributes redirectAttributes) {
+		if(weixinMenuService.synMenu())
+			addMessage(redirectAttributes, "同步菜单成功");
+		else
+			addMessage(redirectAttributes, "同步菜单失败");
+
+		return "redirect:"+Global.getAdminPath()+"/weixin/weixinMenu/?repage";
+	}
+
+
 
 }

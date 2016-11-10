@@ -8,7 +8,9 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.cms.entity.*;
 import com.thinkgem.jeesite.modules.cms.utils.CmsUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import com.thinkgem.jeesite.modules.weixin.http.SmsHttpCore;
 import org.apache.shiro.session.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,10 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping(value = "${frontPath}/weixin")
 public class WeixinFrontController extends BaseController{
-	
+
+	@Autowired
+	SmsHttpCore smsHttpCore;
+
 	/**
 	 * 网站首页
 	 */
@@ -46,22 +51,24 @@ public class WeixinFrontController extends BaseController{
 	 */
 	@RequestMapping(value = "/get_verify_code",produces="application/json;charset=UTF-8")
 	@ResponseBody
-	public String getVerifyCode(@RequestParam(value = "phone",required = true) String phone){
-		String code = "1001";
-		CacheUtils.put(CacheUtils.Weixin_CACHE_VERIFY_CODE,code);
-		return "{ \"result\": \"0\", \"code\": \"1001\"}";
+	public String getVerifyCode(@RequestParam(value = "phone",required = true) String mobile){
+		smsHttpCore.send(mobile);
+		return "{ \"result\": \"0\", \"code\": \"0\"}";
 	}
 
 	/**
 	 * 验证验证码
 	 */
 	@RequestMapping("/do_verify_code")
-	public String doVerifyCode(Model model,@RequestParam(value = "phone",required = true) String phone,@RequestParam(value = "verify_code",required = true) String code) {
-		String oCode = CacheUtils.get(CacheUtils.Weixin_CACHE_VERIFY_CODE).toString();
-		if(oCode.equals(code)){//登录成功
+	public String doVerifyCode(Model model,@RequestParam(value = "phone",required = true) String phone,@RequestParam(value = "verify_code",required = true) int code) {
+		int oCode = (Integer) CacheUtils.get(CacheUtils.Weixin_CACHE_VERIFY_CODE,phone);
+		if(oCode==code){//登录成功
 			Session session = UserUtils.getSession();
 			session.setAttribute("login",true);
+			return "redirect:user_choose_role";
 		}
+		model.addAttribute("phone",phone);
+		model.addAttribute("message","验证码错误");
 		return "modules/weixin/front/weixin/verifyCodePage";
 	}
 
@@ -71,6 +78,14 @@ public class WeixinFrontController extends BaseController{
 	@RequestMapping("/user_terms")
 	public String userTerms() {
 		return "modules/weixin/front/weixin/user_terms";
+	}
+
+	/**
+	 * 角色选择
+	 */
+	@RequestMapping("/user_choose_role")
+	public String roleChoose() {
+		return "modules/weixin/front/weixin/frontChooseRole";
 	}
 
 }

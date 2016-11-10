@@ -18,4 +18,7 @@ import java.util.List;
 public interface WeixinMenuDao extends CrudDao<WeixinMenu> {
 	List<WeixinMenu> findFirstLevelList();
 	void deleteAll();
+	void deleteIncludeChildren(WeixinMenu weixinMenu);
+
+	WeixinMenu getByName(String name);
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 import com.thinkgem.jeesite.common.mapper.JsonMapper;
 import com.thinkgem.jeesite.modules.weixin.exception.WeiXinException;
 import com.thinkgem.jeesite.modules.weixin.http.WeixinHttpCore;
+import com.thinkgem.jeesite.modules.weixin.vo.WeixinInquiryMenu;
 import com.thinkgem.jeesite.modules.weixin.vo.WeixinMenuItemMeta;
 import com.thinkgem.jeesite.modules.weixin.vo.WeixinMenuMeta;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class WeixinMenuService extends CrudService<WeixinMenuDao, WeixinMenu> {
 
 	@Autowired
 	WeixinHttpCore weixinHttpCore;
+
 	@Autowired
 	WeixinAPIService weixinAPIService;
 
@@ -45,62 +47,26 @@ public class WeixinMenuService extends CrudService<WeixinMenuDao, WeixinMenu> {
 	}
 	@Transactional(readOnly = false)
 	public Page<WeixinMenu> findPageMenu(Page<WeixinMenu> page, WeixinMenu weixinMenu) throws WeiXinException{
-		int i=0;
-		//weixinHttpCore
-		String menuJson = weixinHttpCore.getMenu(weixinAPIService.getOrNewToken());
-		if(menuJson.contains("{\"errcode\"")){
-			throw new WeiXinException("获取菜单失败,请稍候重试");
-		}
-		if(menuJson!=null){
-			WeixinMenuMeta menuMeta = JsonMapper.getInstance().fromJson(menuJson,WeixinMenuMeta.class);
-			//先删除数据库中的菜单
-			dao.deleteAll();
-			//先保存一级菜单
-			List<WeixinMenuItemMeta> itemMetas = menuMeta.getButton();
-			for(WeixinMenuItemMeta itemMeta:itemMetas){
-				i++;
-				WeixinMenu entity = new WeixinMenu();
-				entity.setName(itemMeta.getName());
-				entity.setType(itemMeta.getType());
-				entity.setUrl(itemMeta.getUrl());
-				entity.setMkey(itemMeta.getKey());
-				entity.setMorder(i);
-				save(entity);
-			}
-
-			//再保存二级菜单
-			for(WeixinMenuItemMeta itemMeta:itemMetas){
-
-				List<WeixinMenuItemMeta> subItem = itemMeta.getSub_button();
-				if(subItem!=null){
-					i++;
-					WeixinMenu entity = new WeixinMenu();
-					entity.setName(itemMeta.getName());
-					entity.setType(itemMeta.getType());
-					entity.setUrl(itemMeta.getUrl());
-					entity.setMkey(itemMeta.getKey());
-					entity.setMorder(i);
-					save(entity);
-				}
-
-			}
-
-		}
-
-		page.setOrderBy("morder");
 		return super.findPage(page, weixinMenu);
 	}
-	
-	@Transactional(readOnly = false)
-	public void save(WeixinMenu weixinMenu) {
-		//保存到数据库
-		super.save(weixinMenu);
+
+	private WeixinMenu getByName(String name) {
+		return dao.getByName(name);
+	}
+
+	public boolean synMenu(){
 		//同步到微信服务器
 		WeixinMenuMeta menuMeta = new WeixinMenuMeta();
 		List<WeixinMenuItemMeta> itemMetas = new ArrayList<>(0);
 		menuMeta.setButton(itemMetas);
 
 		List<WeixinMenu> menus = findList(null);
+		if(menus.isEmpty()){
+			String rep = weixinHttpCore.deleteMenu(weixinAPIService.getOrNewToken());
+			if(rep.equals("{\"errcode\":0,\"errmsg\":\"ok\"}"))return true;
+			return false;
+		}
+
 		for(WeixinMenu menu:menus){
 
 			if(menu.getParent().equals("0")){
@@ -149,20 +115,32 @@ public class WeixinMenuService extends CrudService<WeixinMenuDao, WeixinMenu> {
 		}
 
 		String menusJson = JsonMapper.getInstance().toJson(menuMeta);
-		weixinHttpCore.menuCreate(weixinAPIService.getOrNewToken(),menusJson);
+		String rep = weixinHttpCore.menuCreate(weixinAPIService.getOrNewToken(),menusJson);
+		if(rep.equals("{\"errcode\":0,\"errmsg\":\"ok\"}"))return true;
+		return false;
+	}
 
+	@Transactional(readOnly = false)
+	public void save(WeixinMenu weixinMenu,boolean syn) {
+		//保存到数据库
+		super.save(weixinMenu);
+//		if(!syn)return;
+//		synMenu();
 	}
 	
 	@Transactional(readOnly = false)
 	public void delete(WeixinMenu weixinMenu) {
-		super.delete(weixinMenu);
+		dao.deleteIncludeChildren(weixinMenu);
+//		super.delete(weixinMenu);
+//		//同步到微信
+//		synMenu();
 	}
 
 	public List<WeixinMenu> findFirstLevelList(){
 		return dao.findFirstLevelList();
 	}
 
-	public  Map<String, String> getMenuSelect(){
+	public  Map<String, String> getMenuSelect(String id){
 
 		List<WeixinMenu> menus = findFirstLevelList();
 		Map<String, String> map = new HashMap<String, String>();
@@ -170,6 +148,7 @@ public class WeixinMenuService extends CrudService<WeixinMenuDao, WeixinMenu> {
 
 		if(menus!=null&&menus.size()>0){
 			for(WeixinMenu menu:menus){
+				if(menu.getId().equals(id))continue;
 				map.put(menu.getId(),menu.getName());
 			}
 		}

@@ -5,6 +5,9 @@
 	<sql id="weixinUserColumns">
 		a.id AS "id",
 		a.name AS "name",
+		a.nick_name AS "nickName",
+		a.company AS "company",
+		a.cer_file1 AS "cerFile1",
 		a.gender AS "gender",
 		a.type AS "type",
 		a.register_phone AS "registerPhone",
@@ -42,8 +45,14 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
-			<if test="gender != null and gender != ''">
-				AND a.gender = #{gender}
+			<if test="company != null and company != ''">
+				AND a.company LIKE
+					<if test="dbName == 'oracle'">'%'||#{company}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{company}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{company},'%')</if>
+			</if>
+			<if test="registerPhone != null and registerPhone != ''">
+				AND a.register_phone = #{registerPhone}
 			</if>
 			<if test="type != null and type != ''">
 				AND a.type = #{type}
@@ -81,6 +90,11 @@
 		INSERT INTO weixin_user(
 			id,
 			name,
+			nick_name,
+			company,
+			cer_file1,
+			cer_file2,
+			cer_file3,
 			gender,
 			type,
 			register_phone,
@@ -95,6 +109,11 @@
 		) VALUES (
 			#{id},
 			#{name},
+			#{nickName},
+			#{company},
+			#{cerFile1},
+			#{cerFile2},
+			#{cerFile3},
 			#{gender},
 			#{type},
 			#{registerPhone},
@@ -112,6 +131,11 @@
 	<update id="update">
 		UPDATE weixin_user SET 	
 			name = #{name},
+			nick_name = #{nickName},
+			company = #{company},
+			cer_file1 = #{cerFile1},
+			cer_file2 = #{cerFile2},
+			cer_file3 = #{cerFile3},
 			gender = #{gender},
 			type = #{type},
 			register_phone = #{registerPhone},

@@ -8,3 +8,11 @@
 .weixin_back_btn {
     position: absolute;top:0px;left:50px;height: 40px; line-height: 40px;color: white;
 }
+
+.round {
+    padding:15px; width:300px; height:100px;
+    background:#FC9;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius:5px;
+}

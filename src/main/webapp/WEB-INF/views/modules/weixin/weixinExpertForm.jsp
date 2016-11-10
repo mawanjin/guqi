@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@include file="/WEB-INF/views/include/adminlte.jsp" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>用户管理</title>
+	<title>专家管理</title>
 	<meta name="decorator" content="default"/>
 	<%@include file="/WEB-INF/views/include/adminlte.jsp" %>
 	<script type="text/javascript">
@@ -28,48 +29,12 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/weixin/weixinUser/">客户列表</a></li>
-		<li class="active"><a href="${ctx}/weixin/weixinUser/form?id=${weixinUser.id}">用户<shiro:hasPermission name="weixin:weixinUser:edit">${not empty weixinUser.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="weixin:weixinUser:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/weixin/weixinExpert/">专家列表</a></li>
+		<li class="active"><a href="${ctx}/weixin/weixinExpert/form?id=${weixinExpert.id}">专家<shiro:hasPermission name="weixin:weixinExpert:edit">${not empty weixinExpert.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="weixin:weixinExpert:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="weixinUser" action="${ctx}/weixin/weixinUser/save" method="post" class="col-md-8" role="form">
+	<form:form id="inputForm" modelAttribute="weixinExpert" action="${ctx}/weixin/weixinExpert/save" method="post" class="col-md-8" role="form">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
-		<div class="form-group">
-			<label class="control-label">姓名：</label>
-			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="45" class="form-control "/>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label">昵称：</label>
-			<div class="controls">
-				<form:input path="nickName" htmlEscape="false" maxlength="45" class="form-control "/>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label">所属企业：</label>
-			<div class="controls">
-				<form:input path="company" htmlEscape="false" maxlength="45" class="form-control "/>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label">性别：</label>
-			<div class="controls">
-				<form:select path="gender" class="form-control ">
-					<form:options items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label">职位：</label>
-			<div class="controls">
-				<form:select path="type" class="form-control ">
-					<form:options items="${fns:getDictList('weixin_msg_customer_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
 		<div class="form-group">
 			<label class="control-label">手机号：</label>
 			<div class="controls">
@@ -77,9 +42,39 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">微信的用户唯一标识：</label>
+			<label class="control-label">姓名：</label>
 			<div class="controls">
-				<form:input path="weixinOpenid" htmlEscape="false" maxlength="45" class="form-control "/>
+				<form:input path="name" htmlEscape="false" maxlength="45" class="form-control "/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">昵称：</label>
+			<div class="controls">
+				<form:input path="nickName" htmlEscape="false" maxlength="45" class="form-control "/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">所属企业：</label>
+			<div class="controls">
+				<form:input path="company" htmlEscape="false" maxlength="45" class="form-control "/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">累计提现：</label>
+			<div class="controls">
+				<form:input path="withdraw" htmlEscape="false" maxlength="11" class="form-control "/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">暂不能结算金额：</label>
+			<div class="controls">
+				<form:input path="deposite" htmlEscape="false" maxlength="11" class="form-control "/>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">欠账金额：</label>
+			<div class="controls">
+				<form:input path="loan" htmlEscape="false" maxlength="11" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-group">
@@ -89,22 +84,21 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label">备注信息：</label>
+			<label class="control-label">居住区域：</label>
 			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="form-control "/>
+				<form:input path="address" htmlEscape="false" maxlength="45" class="form-control "/>
 			</div>
 		</div>
-
 		<div class="form-group">
-			<label class="control-label">三证合一1:</label>
+			<label class="control-label">角色：</label>
 			<div class="controls">
-				<form:hidden id="nameImage" path="cerFile1" htmlEscape="false" maxlength="255" class="form-control "/>
-				<sys:ckfinder input="nameImage" type="images" uploadPath="/weixin/customer/photo" selectMultiple="true"/>
+				<form:select path="type" class="form-control ">
+					<form:options items="${fns:getDictList('weixin_msg_customer_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
-
 		<div class="form-actions">
-			<shiro:hasPermission name="weixin:weixinUser:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="weixin:weixinExpert:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

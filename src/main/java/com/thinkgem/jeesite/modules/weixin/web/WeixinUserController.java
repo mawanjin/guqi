@@ -22,6 +22,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.weixin.entity.WeixinUser;
 import com.thinkgem.jeesite.modules.weixin.service.WeixinUserService;
 
+import java.util.List;
+
 /**
  * 用户主表Controller
  * @author mawj
@@ -68,7 +70,7 @@ public class WeixinUserController extends BaseController {
 			return form(weixinUser, model);
 		}
 		weixinUserService.save(weixinUser);
-		addMessage(redirectAttributes, "保存用户成功");
+		addMessage(redirectAttributes, "保存客户成功");
 		return "redirect:"+Global.getAdminPath()+"/weixin/weixinUser/?repage";
 	}
 	
@@ -76,7 +78,7 @@ public class WeixinUserController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(WeixinUser weixinUser, RedirectAttributes redirectAttributes) {
 		weixinUserService.delete(weixinUser);
-		addMessage(redirectAttributes, "删除用户成功");
+		addMessage(redirectAttributes, "删除客户成功");
 		return "redirect:"+Global.getAdminPath()+"/weixin/weixinUser/?repage";
 	}
 

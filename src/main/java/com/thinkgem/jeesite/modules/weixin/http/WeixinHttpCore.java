@@ -1,6 +1,8 @@
 package com.thinkgem.jeesite.modules.weixin.http;
 
+import com.thinkgem.jeesite.common.utils.SpringContextHolder;
 import org.apache.commons.codec.digest.Md5Crypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,14 +15,18 @@ import org.springframework.web.client.RestTemplate;
  */
 @Component
 public class WeixinHttpCore {
-
-    RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    RestTemplate restTemplate ;
+//    RestTemplate restTemplate = new RestTemplate();
 
     @Value("#{APP_PROP['config.weixin.custom']}")
     String weixinCustomHost;
 
     @Value("#{APP_PROP['config.weixin.menu']}")
     String weixinMenuHost;
+
+    @Value("#{APP_PROP['config.weixin.root.url']}")
+    String weixinRootHost;
 
     /**
      * 获取客服人员信息列表
@@ -157,7 +163,7 @@ public class WeixinHttpCore {
      * @param pageSize
      * @return
      */
-    public String closeKfSession(String accessToken,String startTime,String endTime,int pageIndex,int pageSize){
+    public String getCustomMsgRecord(String accessToken,String startTime,String endTime,int pageIndex,int pageSize){
 
         /*{
             "errcode": 0,
@@ -199,7 +205,7 @@ public class WeixinHttpCore {
      * @return
      */
     public String menuCreate(String accessToken,String menus){
-        String url = weixinMenuHost+"/menu/create?access_token="+accessToken;
+        String url = weixinMenuHost+"/create?access_token="+accessToken;
         HttpHeaders headers = new HttpHeaders();
         MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
         headers.setContentType(type);
@@ -209,17 +215,55 @@ public class WeixinHttpCore {
         return rep;
     }
 
+    /**
+     * 删除菜单
+     * @param accessToken
+     * @return
+     *
+     *
+     */
+    public String deleteMenu(String accessToken){
+        String url = weixinMenuHost+"/delete?access_token="+accessToken;
+        return restTemplate.getForObject(url, String.class);
+    }
 
     /**
-     * 获取未接入会话列表
+     * 获取菜单列表
      * @param accessToken
      * @return
      *
      *
      */
     public String getMenu(String accessToken){
-        String url = weixinCustomHost+"/get?access_token="+accessToken;
+        String url = weixinRootHost+"/menu/get?access_token="+accessToken;
         return restTemplate.getForObject(url, String.class);
     }
+
+
+    /**
+     * 获取模板列表
+     * @param accessToken
+     * @return
+     *
+     *
+     */
+    public String getAllPrivateTemplate(String accessToken){
+        String url = weixinRootHost+"/template/get_all_private_template?access_token="+accessToken;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    /**
+     * 获取用户基本信息
+     * @param accessToken
+     * @return
+     *
+     *
+     */
+    public String getUserInfoByOpenId(String openId,String accessToken){
+        String url = weixinRootHost+"/user/info?access_token="+accessToken+"&openid="+openId+"&lang=zh_CN";
+        return restTemplate.getForObject(url, String.class);
+    }
+
+
 
 }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weixin.dao.WeixinExpertDao">
+    
+	<sql id="weixinExpertColumns">
+		a.id AS "id",
+		a.register_phone AS "registerPhone",
+		a.name AS "name",
+		a.nick_name AS "nickName",
+		a.company AS "company",
+		a.withdraw AS "withdraw",
+		a.deposite AS "deposite",
+		a.loan AS "loan",
+		a.del_flag AS "delFlag",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.email AS "email",
+		a.address AS "address",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="weixinExpertJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinExpert">
+		SELECT 
+			<include refid="weixinExpertColumns"/>
+		FROM weixin_expert a
+		<include refid="weixinExpertJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinExpert">
+		SELECT 
+			<include refid="weixinExpertColumns"/>
+		FROM weixin_expert a
+		<include refid="weixinExpertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+
+			<if test="registerPhone != null and registerPhone != ''">
+				AND a.register_phone = #{registerPhone}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinExpert">
+		SELECT 
+			<include refid="weixinExpertColumns"/>
+		FROM weixin_expert a
+		<include refid="weixinExpertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_expert(
+			id,
+			register_phone,
+			name,
+			nick_name,
+			company,
+			withdraw,
+			deposite,
+			loan,
+			del_flag,
+			create_date,
+			update_date,
+			email,
+			address,
+			type
+		) VALUES (
+			#{id},
+			#{registerPhone},
+			#{name},
+			#{nickName},
+			#{company},
+			#{withdraw},
+			#{deposite},
+			#{loan},
+			#{delFlag},
+			#{createDate},
+			#{updateDate},
+			#{email},
+			#{address},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_expert SET 	
+			register_phone = #{registerPhone},
+			name = #{name},
+			nick_name = #{nickName},
+			company = #{company},
+			withdraw = #{withdraw},
+			deposite = #{deposite},
+			loan = #{loan},
+			update_date = #{updateDate},
+			email = #{email},
+			address = #{address},
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE weixin_expert SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

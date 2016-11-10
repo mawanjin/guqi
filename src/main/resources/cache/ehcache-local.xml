@@ -32,6 +32,6 @@
 	<cache name="weixinAccessTokenCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true" timeToLiveSeconds="7200" />
 
 	<!-- 验证码缓存 -->
-	<cache name="Weixin_CACHE_VERIFY_CODE" maxEntriesLocalHeap="10" eternal="true" overflowToDisk="false" timeToLiveSeconds="300" />
+	<cache name="Weixin_CACHE_VERIFY_CODE" maxEntriesLocalHeap="10" eternal="true" overflowToDisk="false" timeToLiveSeconds="180" />
     	
 </ehcache>

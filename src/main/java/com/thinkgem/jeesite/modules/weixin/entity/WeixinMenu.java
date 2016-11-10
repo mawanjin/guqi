@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
+import java.util.List;
+
 /**
  * 菜单Entity
  * @author mawj
@@ -90,5 +92,24 @@ public class WeixinMenu extends DataEntity<WeixinMenu> {
 
 	public void setMorder(int morder) {
 		this.morder = morder;
+	}
+
+	public static void sortList(List<WeixinMenu> list, List<WeixinMenu> sourcelist, String parentId){
+		for (int i=0; i<sourcelist.size(); i++){
+			WeixinMenu e = sourcelist.get(i);
+			if (e.getParent()!=null
+					&& e.getParent().equals(parentId)){
+				list.add(e);
+				// 判断是否还有子节点, 有则继续获取子节点
+				for (int j=0; j<sourcelist.size(); j++){
+					WeixinMenu child = sourcelist.get(j);
+					if (child.getParent()!=null
+							&& child.getParent().equals(e.getId())){
+						sortList(list, sourcelist, e.getId());
+						break;
+					}
+				}
+			}
+		}
 	}
 }

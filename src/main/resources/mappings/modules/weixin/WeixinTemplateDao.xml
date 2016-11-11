@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weixin.dao.WeixinTemplateDao">
+    
+	<sql id="weixinTemplateColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.openid AS "openid",
+		a.template_id AS "templateId",
+		a.create_date AS "createDate",
+		a.status AS "status",
+		a.msg AS "msg",
+		a.url AS "url",
+		a.del_flag AS "delFlag",
+		a.success_date AS "successDate"
+	</sql>
+	
+	<sql id="weixinTemplateJoins">
+	</sql>
+    
+	<select id="get" resultType="WeixinTemplate">
+		SELECT 
+			<include refid="weixinTemplateColumns"/>
+		FROM weixin_template a
+		<include refid="weixinTemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinTemplate">
+		SELECT 
+			<include refid="weixinTemplateColumns"/>
+		FROM weixin_template a
+		<include refid="weixinTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="openid != null and openid != ''">
+				AND a.openid = #{openid}
+			</if>
+			<if test="templateId != null and templateId != ''">
+				AND a.template_id = #{templateId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinTemplate">
+		SELECT 
+			<include refid="weixinTemplateColumns"/>
+		FROM weixin_template a
+		<include refid="weixinTemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_template(
+			id,
+			name,
+			openid,
+			template_id,
+			create_date,
+			status,
+			msg,
+			url,
+			del_flag,
+			success_date
+		) VALUES (
+			#{id},
+			#{name},
+			#{openid},
+			#{templateId},
+			#{createDate},
+			#{status},
+			#{msg},
+			#{url},
+			#{delFlag},
+			#{successDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_template SET 	
+			name = #{name},
+			openid = #{openid},
+			template_id = #{templateId},
+			status = #{status},
+			msg = #{msg},
+			url = #{url},
+			success_date = #{successDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE weixin_template SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

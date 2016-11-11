@@ -1,6 +1,8 @@
 package com.thinkgem.jeesite.modules.weixin.http;
 
+import com.thinkgem.jeesite.common.mapper.JsonMapper;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
+import com.thinkgem.jeesite.modules.weixin.vo.WeixinTemplateMsg;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -264,6 +266,20 @@ public class WeixinHttpCore {
         return restTemplate.getForObject(url, String.class);
     }
 
-
+    /**
+     * 发送模板消息
+     * @param accessToken
+     * @return
+     */
+    public String sendTemplateMsg(String accessToken,WeixinTemplateMsg weixinTemplateMsg){
+        String url = weixinRootHost+"message/template/send?access_token="+accessToken;
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+        headers.setContentType(type);
+        headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+        HttpEntity<String> formEntity = new HttpEntity<String>(JsonMapper.toJsonString(weixinTemplateMsg), headers);
+        String rep = restTemplate.postForObject(url, formEntity, String.class);
+        return rep;
+    }
 
 }

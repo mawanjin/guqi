@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.weixin.dao.WeixinOrderDao">
+    
+	<sql id="weixinOrderColumns">
+		a.id AS "id",
+		a.order_id AS "orderId",
+		a.order_type AS "orderType",
+		a.customer_phone AS "customerPhone",
+		a.customer_nick_name AS "customerNickName",
+		a.customer_company AS "customerCompany",
+		a.first_kf AS "firstKf",
+		a.status AS "status",
+		a.remarks AS "remarks",
+		a.price_customer AS "priceCustomer",
+		a.price_expert AS "priceExpert",
+		a.expire_time AS "expireTime",
+		a.auction_type AS "auctionType",
+		a.expert AS "expert",
+		a.supplier AS "supplier",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.purchase_type AS "purchaseType",
+		e.id AS "expert.id",
+		e.register_phone AS "expert.registerPhone",
+		e.name AS "expert.name",
+		e.nick_name AS "expert.nickName",
+		e.company AS "expert.company",
+		e.withdraw AS "expert.withdraw",
+		e.deposite AS "expert.deposite",
+		e.loan AS "expert.loan",
+		e.del_flag AS "expert.delFlag",
+		e.create_date AS "expert.createDate",
+		e.update_date AS "expert.updateDate",
+		e.email AS "expert.email",
+		e.address AS "expert.address",
+		e.type AS "expert.type",
+		s.id AS "supplier.id",
+		s.register_phone AS "supplier.registerPhone",
+		s.name AS "supplier.name",
+		s.nick_name AS "supplier.nickName",
+		s.company AS "supplier.company",
+		s.cer_file1 AS "supplier.cerFile1",
+		s.type AS "supplier.type",
+		s.email AS "supplier.email",
+		s.address AS "supplier.address",
+		s.cer_type AS "supplier.cerType",
+		s.bank AS "supplier.bank",
+		s.bank_account AS "supplier.bankAccount",
+		s.card AS "supplier.card",
+		s.create_date AS "supplier.createDate",
+		s.update_date AS "supplier.updateDate",
+		s.del_flag AS "supplier.delFlag"
+
+	</sql>
+	
+	<sql id="weixinOrderJoins">
+		LEFT JOIN weixin_expert e ON e.id = a.expert
+		LEFT JOIN weixin_supplier s ON s.id = a.supplier
+	</sql>
+    
+	<select id="get" resultType="WeixinOrder">
+		SELECT 
+			<include refid="weixinOrderColumns"/>
+		FROM weixin_order a
+		<include refid="weixinOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WeixinOrder">
+		SELECT 
+			<include refid="weixinOrderColumns"/>
+		FROM weixin_order a
+		<include refid="weixinOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="orderId != null and orderId != ''">
+				AND a.order_id = #{orderId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WeixinOrder">
+		SELECT 
+			<include refid="weixinOrderColumns"/>
+		FROM weixin_order a
+		<include refid="weixinOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO weixin_order(
+			id,
+			order_id,
+			order_type,
+			customer_phone,
+			customer_nick_name,
+			customer_company,
+			first_kf,
+			status,
+			remarks,
+			price_customer,
+			price_expert,
+			expire_time,
+			auction_type,
+			expert,
+			supplier,
+			create_date,
+			create_by,
+			update_by,
+			update_date,
+			del_flag,
+			purchase_type
+		) VALUES (
+			#{id},
+			#{orderId},
+			#{orderType},
+			#{customerPhone},
+			#{customerNickName},
+			#{customerCompany},
+			#{firstKf},
+			#{status},
+			#{remarks},
+			#{priceCustomer},
+			#{priceExpert},
+			#{expireTime},
+			#{auctionType},
+			#{expert},
+			#{supplier},
+			#{createDate},
+			#{createBy.id},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{purchaseType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE weixin_order SET 	
+			order_id = #{orderId},
+			order_type = #{orderType},
+			customer_phone = #{customerPhone},
+			customer_nick_name = #{customerNickName},
+			customer_company = #{customerCompany},
+			first_kf = #{firstKf},
+			status = #{status},
+			remarks = #{remarks},
+			price_customer = #{priceCustomer},
+			price_expert = #{priceExpert},
+			expire_time = #{expireTime},
+			auction_type = #{auctionType},
+			expert = #{expert},
+			supplier = #{supplier},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			purchase_type = #{purchaseType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE weixin_order SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

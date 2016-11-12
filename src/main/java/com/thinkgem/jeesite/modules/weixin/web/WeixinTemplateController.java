@@ -112,11 +112,11 @@ public class WeixinTemplateController extends BaseController {
 		if(weixinTemplate.getTemplateId().equals("Hz9CBDxAX8iwbTxWXu3ec9DXGhe4U_iOGsWtCpml9Pg")){
 			TemplateItemEMS itemEMS = new TemplateItemEMS();
 			itemEMS.getFirst().setValue("亲,你的货物已经启程了,好想快点来到你身边");
-			itemEMS.setDelivername(weixinTemplate.getDeliverName());
-			itemEMS.setOrdername(weixinTemplate.getOrderName());
-			itemEMS.setProductName(weixinTemplate.getProductName());
-			itemEMS.setProductCount(weixinTemplate.getProductCount());
-			itemEMS.setRemark(weixinTemplate.getRemark());
+			itemEMS.getDelivername().setValue(weixinTemplate.getDeliverName());
+			itemEMS.getOrdername().setValue(weixinTemplate.getOrderName());
+			itemEMS.getProductName().setValue(weixinTemplate.getProductName());
+			itemEMS.getProductCount().setValue(weixinTemplate.getProductCount());
+			itemEMS.getRemark().setValue(weixinTemplate.getRemark());
 			msg.setData(itemEMS);
 		}
 

@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.weixin.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.thinkgem.jeesite.common.mapper.JsonMapper;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -32,7 +34,8 @@ public class WeixinTemplate extends DataEntity<WeixinTemplate> {
 	private String productName;//商品名称
 	private String productCount;//商品数量
 	private String remark;//备注
-
+	@JsonIgnore
+	private String jsonData;
 
 	public WeixinTemplate() {
 		super();
@@ -154,5 +157,13 @@ public class WeixinTemplate extends DataEntity<WeixinTemplate> {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getJsonData() {
+		return JsonMapper.toJsonString(this);
+	}
+
+	public void setJsonData(String jsonData) {
+		this.jsonData = jsonData;
 	}
 }

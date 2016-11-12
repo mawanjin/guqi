@@ -45,6 +45,10 @@
 			<if test="templateId != null and templateId != ''">
 				AND a.template_id = #{templateId}
 			</if>
+
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

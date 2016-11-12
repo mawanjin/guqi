@@ -272,12 +272,14 @@ public class WeixinHttpCore {
      * @return
      */
     public String sendTemplateMsg(String accessToken,WeixinTemplateMsg weixinTemplateMsg){
-        String url = weixinRootHost+"message/template/send?access_token="+accessToken;
+        String url = weixinRootHost+"/message/template/send?access_token="+accessToken;
         HttpHeaders headers = new HttpHeaders();
         MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
         headers.setContentType(type);
         headers.add("Accept", MediaType.APPLICATION_JSON.toString());
-        HttpEntity<String> formEntity = new HttpEntity<String>(JsonMapper.toJsonString(weixinTemplateMsg), headers);
+        String msg = JsonMapper.toJsonString(weixinTemplateMsg);
+//        String msg = "{\"touser\": \"oCaAFwCu6_vtb5Bk5fXe4tywWGFI\",\"url\": \"http://www.baidu.com\",\"topcolor\": \"#000033\",\"data\": {\"first\": {\"value\": \"这里是标题\"},\"delivername\": {\"value\": \"顺风\"},\"ordername\": {\"value\": \"3432432\"},\"productName\": {\"value\": \"小白兔\"},\"productCount\": {\"value\": \"100件\"},\"remark\": {\"value\": \"这里是备注\"}},\"template_id\": \"Hz9CBDxAX8iwbTxWXu3ec9DXGhe4U_iOGsWtCpml9Pg\"}";
+        HttpEntity<String> formEntity = new HttpEntity<String>(msg, headers);
         String rep = restTemplate.postForObject(url, formEntity, String.class);
         return rep;
     }

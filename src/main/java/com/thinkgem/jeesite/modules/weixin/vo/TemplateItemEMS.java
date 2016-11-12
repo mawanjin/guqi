@@ -5,11 +5,11 @@ package com.thinkgem.jeesite.modules.weixin.vo;
  */
 public class TemplateItemEMS {
     TemplateItemMeta first = new TemplateItemMeta();
-    String delivername;
-    String ordername;
-    String productName;//商品名称
-    String productCount;//商品数量
-    String remark;
+    TemplateItemMeta delivername = new TemplateItemMeta();
+    TemplateItemMeta ordername = new TemplateItemMeta();
+    TemplateItemMeta productName = new TemplateItemMeta();
+    TemplateItemMeta productCount = new TemplateItemMeta();
+    TemplateItemMeta remark = new TemplateItemMeta();
 
     public TemplateItemMeta getFirst() {
         return first;
@@ -19,43 +19,43 @@ public class TemplateItemEMS {
         this.first = first;
     }
 
-    public String getDelivername() {
+    public TemplateItemMeta getDelivername() {
         return delivername;
     }
 
-    public void setDelivername(String delivername) {
+    public void setDelivername(TemplateItemMeta delivername) {
         this.delivername = delivername;
     }
 
-    public String getOrdername() {
+    public TemplateItemMeta getOrdername() {
         return ordername;
     }
 
-    public void setOrdername(String ordername) {
+    public void setOrdername(TemplateItemMeta ordername) {
         this.ordername = ordername;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getProductName() {
+    public TemplateItemMeta getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) {
+    public void setProductName(TemplateItemMeta productName) {
         this.productName = productName;
     }
 
-    public String getProductCount() {
+    public TemplateItemMeta getProductCount() {
         return productCount;
     }
 
-    public void setProductCount(String productCount) {
+    public void setProductCount(TemplateItemMeta productCount) {
         this.productCount = productCount;
+    }
+
+    public TemplateItemMeta getRemark() {
+        return remark;
+    }
+
+    public void setRemark(TemplateItemMeta remark) {
+        this.remark = remark;
     }
 }

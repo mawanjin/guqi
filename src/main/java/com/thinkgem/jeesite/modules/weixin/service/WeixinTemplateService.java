@@ -49,11 +49,11 @@ public class WeixinTemplateService extends CrudService<WeixinTemplateDao, Weixin
 		if(weixinTemplate.getTemplateId().equals("Hz9CBDxAX8iwbTxWXu3ec9DXGhe4U_iOGsWtCpml9Pg")){
 			TemplateItemEMS itemEMS = new TemplateItemEMS();
 			itemEMS.getFirst().setValue(weixinTemplate.getTitle());
-			itemEMS.setDelivername(weixinTemplate.getDeliverName());
-			itemEMS.setOrdername(weixinTemplate.getOrderName());
-			itemEMS.setProductName(weixinTemplate.getProductName());
-			itemEMS.setProductCount(weixinTemplate.getProductCount());
-			itemEMS.setRemark(weixinTemplate.getRemark());
+			itemEMS.getDelivername().setValue(weixinTemplate.getDeliverName());
+			itemEMS.getOrdername().setValue(weixinTemplate.getOrderName());
+			itemEMS.getProductName().setValue(weixinTemplate.getProductName());
+			itemEMS.getProductCount().setValue(weixinTemplate.getProductCount());
+			itemEMS.getRemark().setValue(weixinTemplate.getRemark());
 			msg.setData(itemEMS);
 		}
 		weixinTemplate.setMsg(JsonMapper.toJsonString(msg));
@@ -75,11 +75,11 @@ public class WeixinTemplateService extends CrudService<WeixinTemplateDao, Weixin
 			WeixinTemplateMsg<TemplateItemEMS> msg = (WeixinTemplateMsg<TemplateItemEMS>) JsonMapper.getInstance().fromJson(template.getMsg(),JsonMapper.getInstance().createCollectionType(WeixinTemplateMsg.class,TemplateItemEMS.class));
 			TemplateItemEMS itemEMS = (TemplateItemEMS) msg.getData();
 			template.setOpenid(msg.getTouser());
-			template.setDeliverName(itemEMS.getDelivername());
-			template.setProductName(itemEMS.getProductName());
-			template.setProductCount(itemEMS.getProductCount());
-			template.setRemark(itemEMS.getRemark());
-			template.setOrderName(itemEMS.getOrdername());
+			template.setDeliverName(itemEMS.getDelivername().getValue());
+			template.setProductName(itemEMS.getProductName().getValue());
+			template.setProductCount(itemEMS.getProductCount().getValue());
+			template.setRemark(itemEMS.getRemark().getValue());
+			template.setOrderName(itemEMS.getOrdername().getValue());
 			template.setTitle(itemEMS.getFirst().getValue());
 		}
 	}

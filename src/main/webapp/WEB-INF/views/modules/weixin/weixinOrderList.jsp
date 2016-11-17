@@ -43,11 +43,12 @@
 		<thead>
 			<tr>
 				<th>订单号</td>
+				<th>创建时间</td>
 				<th>客户电话</td>
 				<th>昵称</td>
 				<th>所属企业</td>
 				<th>初始接单人员</td>
-				<th>remarks</td>
+				<th>备注</td>
 				<th>更新时间</td>
 				<shiro:hasPermission name="weixin:weixinOrder:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -58,6 +59,9 @@
 				<td><a href="${ctx}/weixin/weixinOrder/form?id=${weixinOrder.id}">
 					${weixinOrder.orderId}
 				</a></td>
+				<td>
+					<fmt:formatDate value="${weixinOrder.create_date}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
 				<td>
 					${weixinOrder.customerPhone}
 				</td>

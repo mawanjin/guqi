@@ -29,7 +29,12 @@ public class WeixinUserService extends CrudService<WeixinUserDao, WeixinUser> {
 	public List<WeixinUser> findList(WeixinUser weixinUser) {
 		return super.findList(weixinUser);
 	}
-	
+
+	public List<WeixinUser> findAllList() {
+		return dao.findAllList();
+	}
+
+
 	public Page<WeixinUser> findPage(Page<WeixinUser> page, WeixinUser weixinUser) {
 		return super.findPage(page, weixinUser);
 	}
@@ -43,5 +48,7 @@ public class WeixinUserService extends CrudService<WeixinUserDao, WeixinUser> {
 	public void delete(WeixinUser weixinUser) {
 		super.delete(weixinUser);
 	}
-	
+
+
+
 }

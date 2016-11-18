@@ -74,7 +74,7 @@
 		FROM weixin_user a
 		<include refid="weixinUserJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = 0
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

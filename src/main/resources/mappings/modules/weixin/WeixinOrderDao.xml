@@ -9,7 +9,6 @@
 		a.customer_phone AS "customerPhone",
 		a.customer_nick_name AS "customerNickName",
 		a.customer_company AS "customerCompany",
-		a.first_kf AS "firstKf",
 		a.status AS "status",
 		a.remarks AS "remarks",
 		a.price_customer AS "priceCustomer",
@@ -53,13 +52,26 @@
 		s.card AS "supplier.card",
 		s.create_date AS "supplier.createDate",
 		s.update_date AS "supplier.updateDate",
-		s.del_flag AS "supplier.delFlag"
+		s.del_flag AS "supplier.delFlag",
+
+		u.id AS "weixinUser.id",
+		u.name AS "weixinUser.name",
+		u.nick_name AS "weixinUser.nickName",
+		u.company AS "weixinUser.company",
+		u.register_phone AS "weixinUser.registerPhone",
+		u.weixin_openid AS "weixinUser.weixinOpenid",
+
+		c.id AS "firstKf.id",
+		c.kf_nick AS "firstKf.kfNick"
+
 
 	</sql>
 	
 	<sql id="weixinOrderJoins">
 		LEFT JOIN weixin_expert e ON e.id = a.expert
 		LEFT JOIN weixin_supplier s ON s.id = a.supplier
+		LEFT JOIN weixin_user u ON u.id = a.weixin_user
+		LEFT JOIN weixin_custom c ON c.id = a.first_kf
 	</sql>
     
 	<select id="get" resultType="WeixinOrder">
@@ -114,6 +126,7 @@
 			id,
 			order_id,
 			order_type,
+			weixin_user,
 			customer_phone,
 			customer_nick_name,
 			customer_company,
@@ -136,18 +149,19 @@
 			#{id},
 			#{orderId},
 			#{orderType},
+			#{weixinUser.id},
 			#{customerPhone},
 			#{customerNickName},
 			#{customerCompany},
-			#{firstKf},
+			#{firstKf.id},
 			#{status},
 			#{remarks},
 			#{priceCustomer},
 			#{priceExpert},
 			#{expireTime},
 			#{auctionType},
-			#{expert},
-			#{supplier},
+			#{expert.id},
+			#{supplier.id},
 			#{createDate},
 			#{createBy.id},
 			#{updateBy.id},
@@ -161,18 +175,19 @@
 		UPDATE weixin_order SET 	
 			order_id = #{orderId},
 			order_type = #{orderType},
+			weixin_user = #{weixinUser.id},
 			customer_phone = #{customerPhone},
 			customer_nick_name = #{customerNickName},
 			customer_company = #{customerCompany},
-			first_kf = #{firstKf},
+			first_kf = #{firstKf.id},
 			status = #{status},
 			remarks = #{remarks},
 			price_customer = #{priceCustomer},
 			price_expert = #{priceExpert},
 			expire_time = #{expireTime},
 			auction_type = #{auctionType},
-			expert = #{expert},
-			supplier = #{supplier},
+			expert = #{expert.id},
+			supplier = #{supplier.id},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			purchase_type = #{purchaseType}

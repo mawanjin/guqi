@@ -1,13 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@include file="/WEB-INF/views/include/adminlte.jsp" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+
 <html>
+<title>订单管理</title>
 <head>
-	<title>订单管理</title>
+	<script src="${ctxStatic}/jquery-select2/3.4/select2.js"></script>
+	<link href="${ctxStatic}/jquery-select2/3.4/select2.css" rel="stylesheet" />
+
 	<meta name="decorator" content="default"/>
-	<%@include file="/WEB-INF/views/include/adminlte.jsp" %>
 	<script type="text/javascript">
 		$(document).ready(function() {
+
+			$(".select2").select2();
+
 			//$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
@@ -38,54 +44,42 @@
 		<div class="form-group">
 			<label class="control-label">订单号：</label>
 			<div class="controls">
-				<form:input path="orderId" htmlEscape="false" maxlength="45" class="form-control "/>
+				<input type="hidden" name="orderId" value="${weixinOrder.orderId}" />
+				<form:input path="orderId" htmlEscape="false" maxlength="45" class="form-control" disabled="true" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label">订单类型：</label>
 			<div class="controls">
-				<form:input path="orderType" htmlEscape="false" maxlength="1" class="form-control "/>
+				<input  htmlEscape="false" maxlength="45" class="form-control" disabled="false" value="意向单" />
 			</div>
 		</div>
+
 		<div class="form-group">
-			<label class="control-label">客户电话：</label>
+			<label class="control-label">客户：</label>
 			<div class="controls">
-				<form:input path="customerPhone" htmlEscape="false" maxlength="45" class="form-control "/>
+				<select class="select2" path="weixinUser.id" name="weixinUser.id"  data-live-search="true" data-style="btn-primary" style="width: 400px;" >
+					<c:forEach items="${weixinUsers}" var="weixinUser">
+						<option value="${weixinUser.id}">${weixinUser.name}</option>
+					</c:forEach>
+				</select>
 			</div>
 		</div>
-		<div class="form-group">
-			<label class="control-label">昵称：</label>
-			<div class="controls">
-				<form:input path="customerNickName" htmlEscape="false" maxlength="45" class="form-control "/>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label">所属企业：</label>
-			<div class="controls">
-				<form:input path="customerCompany" htmlEscape="false" maxlength="45" class="form-control "/>
-			</div>
-		</div>
+
 		<div class="form-group">
 			<label class="control-label">初始接单人员：</label>
 			<div class="controls">
-				<form:input path="firstKf" htmlEscape="false" maxlength="45" class="form-control "/>
+
+				<select class="select2" path="firstKf.id" name="firstKf.id"  data-live-search="true" data-style="btn-primary" style="width: 400px;" >
+					<c:forEach items="${weixinCustomers}" var="weixinCustomer">
+						<option value="${weixinCustomer.id}">${weixinCustomer.kfNick}</option>
+					</c:forEach>
+				</select>
+				<%--<form:input path="firstKf" name ="firstKf" htmlEscape="false" maxlength="45" class="form-control" disabled="true" />--%>
 			</div>
 		</div>
-		<div class="form-group">
-			<label class="control-label">订单状态：</label>
-			<div class="controls">
-				<form:select path="status" class="form-control ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('weixin_order_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="control-label">说明：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="form-control "/>
-			</div>
-		</div>
+
+
 		<div class="form-group">
 			<label class="control-label">给到客户的报价：</label>
 			<div class="controls">
@@ -102,14 +96,14 @@
 			<label class="control-label">截稿日期：</label>
 			<div class="controls">
 				<input name="expireTime" type="text" readonly="readonly" maxlength="20" class="form-control  "
-					value="<fmt:formatDate value="${weixinOrder.expireTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					value="<fmt:formatDate value="${weixinOrder.expireTime}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="control-label">发布类型：</label>
 			<div class="controls">
-				<form:radiobuttons path="auctionType" items="${fns:getDictList('weixin_auction_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+				<form:radiobuttons path="auctionType" items="${fns:getDictList('weixin_auction_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class="" />
 			</div>
 		</div>
 		<div class="form-group">
@@ -127,10 +121,15 @@
 		<div class="form-group">
 			<label class="control-label">采购类型：</label>
 			<div class="controls">
-				<form:select path="purchaseType" class="form-control ">
-					<form:option value="" label=""/>
+				<form:select path="purchaseType"  style="width: 400px;">
 					<form:options items="${fns:getDictList('weixin_purchase_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label">说明：</label>
+			<div class="controls">
+				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="form-control "/>
 			</div>
 		</div>
 		<div class="form-actions">

@@ -55,7 +55,6 @@
 		</choose>
 	</select>
 
-
 	<select id="findListByKFAccount" resultType="WeixinCustom">
 		SELECT
 			<include refid="weixinCustomColumns"/>
@@ -75,7 +74,7 @@
 		FROM weixin_custom a
 		<include refid="weixinCustomJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			a.del_flag = 0
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

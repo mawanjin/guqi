@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.weixin.entity.WeixinUser;
 
+import java.util.List;
+
 /**
  * 用户主表DAO接口
  * @author mawj
@@ -14,5 +16,5 @@ import com.thinkgem.jeesite.modules.weixin.entity.WeixinUser;
  */
 @MyBatisDao
 public interface WeixinUserDao extends CrudDao<WeixinUser> {
-	
+	List<WeixinUser> findAllList();
 }

@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.weixin.web.front;
 
+import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.cms.utils.WiexinSignUtil;
 import com.thinkgem.jeesite.modules.weixin.entity.WeixinMsg;
@@ -195,6 +196,18 @@ public class WeixinAPIController extends BaseController {
 	public String deleteMenu(){
 		return weixinHttpCore.deleteMenu(weixinAPIService.getOrNewToken());
 	}
+
+	/**
+	 * 生成订单号
+	 * @param
+	 * @return
+	 */
+	@RequestMapping(value = "getOrderId", method = RequestMethod.GET)
+	@ResponseBody
+	public String getOrderId(){
+		return IdGen.randomLong()+"";
+	}
+
 
 
 }

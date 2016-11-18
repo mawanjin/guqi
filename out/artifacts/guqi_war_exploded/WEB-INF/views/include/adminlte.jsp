@@ -27,6 +27,7 @@
 
 
 
+
 <%--<link href="${ctxStatic}/jquery-select2/3.4/select2.min.css" rel="stylesheet" />--%>
 <%--<script src="${ctxStatic}/jquery-select2/3.4/select2.min.js" type="text/javascript"></script>--%>
 <script src="${ctxStatic}/jquery-validation/1.15.0/jquery.validate.min.js" type="text/javascript"></script>

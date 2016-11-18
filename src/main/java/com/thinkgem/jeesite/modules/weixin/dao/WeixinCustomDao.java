@@ -23,4 +23,6 @@ public interface WeixinCustomDao extends CrudDao<WeixinCustom> {
     public int deleteAll();
 
     List<WeixinCustom> findListByKFAccount(String kfAccount);
+
+    List<WeixinCustom> findAllList();
 }

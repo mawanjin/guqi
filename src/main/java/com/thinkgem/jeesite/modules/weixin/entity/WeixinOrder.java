@@ -3,8 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.weixin.entity;
 
-import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -20,9 +20,10 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 	private String orderId;		// 订单号
 	private String orderType;		// 订单类型
 	private String customerPhone;		// 客户电话
+	private WeixinUser weixinUser;//客户
 	private String customerNickName;		// 昵称
 	private String customerCompany;		// 所属企业
-	private String firstKf;		// 初始接单人员
+	private WeixinCustom firstKf;		// 初始接单人员
 	private String status;		// 订单状态
 	private String priceCustomer;		// 给到客户的报价
 	private String priceExpert;		// 给到设计 人员的报价
@@ -31,7 +32,7 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 	private WeixinExpert expert;		// 选定的专家
 	private WeixinSupplier supplier;		// 选定的供应商
 	private String purchaseType;		// 采购类型
-	
+
 	public WeixinOrder() {
 		super();
 	}
@@ -40,7 +41,6 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 		super(id);
 	}
 
-	@Length(min=0, max=45, message="订单号长度必须介于 0 和 45 之间")
 	public String getOrderId() {
 		return orderId;
 	}
@@ -85,12 +85,11 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 		this.customerCompany = customerCompany;
 	}
 	
-	@Length(min=0, max=45, message="初始接单人员长度必须介于 0 和 45 之间")
-	public String getFirstKf() {
+	public WeixinCustom getFirstKf() {
 		return firstKf;
 	}
 
-	public void setFirstKf(String firstKf) {
+	public void setFirstKf(WeixinCustom firstKf) {
 		this.firstKf = firstKf;
 	}
 	
@@ -139,7 +138,7 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 		this.auctionType = auctionType;
 	}
 	
-	@Length(min=0, max=64, message="选定的专家长度必须介于 0 和 64 之间")
+
 	public WeixinExpert getExpert() {
 		return expert;
 	}
@@ -148,7 +147,7 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 		this.expert = expert;
 	}
 	
-	@Length(min=0, max=64, message="选定的供应商长度必须介于 0 和 64 之间")
+
 	public WeixinSupplier getSupplier() {
 		return supplier;
 	}
@@ -157,7 +156,6 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 		this.supplier = supplier;
 	}
 	
-	@Length(min=0, max=1, message="采购类型长度必须介于 0 和 1 之间")
 	public String getPurchaseType() {
 		return purchaseType;
 	}
@@ -165,5 +163,12 @@ public class WeixinOrder extends DataEntity<WeixinOrder> {
 	public void setPurchaseType(String purchaseType) {
 		this.purchaseType = purchaseType;
 	}
-	
+
+	public WeixinUser getWeixinUser() {
+		return weixinUser;
+	}
+
+	public void setWeixinUser(WeixinUser weixinUser) {
+		this.weixinUser = weixinUser;
+	}
 }

@@ -57,7 +57,11 @@ public class WeixinCustomService extends CrudService<WeixinCustomDao, WeixinCust
 	public List<WeixinCustom> findList(WeixinCustom weixinCustom) {
 		return super.findList(weixinCustom);
 	}
-	
+
+	public List<WeixinCustom> findAllList(){
+		return dao.findAllList();
+	}
+
 	public Page<WeixinCustom> findPage(Page<WeixinCustom> page, WeixinCustom weixinCustom) {
 		return super.findPage(page, weixinCustom);
 	}
@@ -129,29 +133,29 @@ public class WeixinCustomService extends CrudService<WeixinCustomDao, WeixinCust
 		HttpEntity<String> formEntity = new HttpEntity<String>(data, headers);
 		String rep = restTemplate.postForObject(url, formEntity, String.class);
 
-		String localPath = weixinCustom.getKfHeadimgurl().substring(weixinCustom.getKfHeadimgurl().indexOf("userfiles"));
-		File headFile = new File(Global.getUserfilesBaseDir()+localPath);
-
+		try{
+			String localPath = weixinCustom.getKfHeadimgurl().substring(weixinCustom.getKfHeadimgurl().indexOf("userfiles"));
+			File headFile = new File(Global.getUserfilesBaseDir()+localPath);
+			if(rep.contains("\"errcode\" : 0")){
+				//上传头像
+				String headUrl = weixinCustomHost+"/kfaccount/uploadheadimg?access_token="+acccessToken+"&kf_account="+weixinCustom.getKfAccount();
+				RestTemplate rest = new RestTemplate();
+				FileSystemResource resource = new FileSystemResource(headFile);
+				MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
+				param.add("file", resource);
+				String uploadRep = rest.postForObject(url, param, String.class);
+				logger.debug("uploadRep = "+uploadRep);
+				super.save(weixinCustom);
+			}else {
+				if(isSave)
+					throw new WeiXinException("客服填加失败");
+				else
+					throw new WeiXinException("客服修改失败");
+			}
+		}catch (Exception e){}
 
 //		http://api.weixin.qq.com/customservice/kfaccount/uploadheadimg?access_token=ACCESS_TOKEN&kf_account=KFACCOUNT
 
-
-		if(rep.contains("\"errcode\" : 0")){
-			//上传头像
-			String headUrl = weixinCustomHost+"/kfaccount/uploadheadimg?access_token="+acccessToken+"&kf_account="+weixinCustom.getKfAccount();
-			RestTemplate rest = new RestTemplate();
-			FileSystemResource resource = new FileSystemResource(headFile);
-			MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-			param.add("file", resource);
-			String uploadRep = rest.postForObject(url, param, String.class);
-			logger.debug("uploadRep = "+uploadRep);
-			super.save(weixinCustom);
-		}else {
-			if(isSave)
-				throw new WeiXinException("客服填加失败");
-			else
-				throw new WeiXinException("客服修改失败");
-		}
 	}
 	
 	@Transactional(readOnly = false)

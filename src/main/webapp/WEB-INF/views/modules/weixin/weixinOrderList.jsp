@@ -44,44 +44,50 @@
 			<tr>
 				<th>订单号</td>
 				<th>创建时间</td>
+				<th>采购类型</td>
 				<th>客户电话</td>
-				<th>昵称</td>
+				<th>微信昵称</td>
 				<th>所属企业</td>
 				<th>初始接单人员</td>
-				<th>备注</td>
 				<th>更新时间</td>
+				<th>备注</td>
 				<shiro:hasPermission name="weixin:weixinOrder:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="weixinOrder">
 			<tr>
-				<td><a href="${ctx}/weixin/weixinOrder/form?id=${weixinOrder.id}">
+				<td>
 					${weixinOrder.orderId}
-				</a></td>
-				<td>
-					<fmt:formatDate value="${weixinOrder.create_date}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${weixinOrder.customerPhone}
+					<fmt:formatDate value="${weixinOrder.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${weixinOrder.customerNickName}
+					${fns:getDictLabel(weixinOrder.purchaseType, 'weixin_purchase_type', '')}
 				</td>
 				<td>
-					${weixinOrder.customerCompany}
+					${weixinOrder.weixinUser.registerPhone}
 				</td>
 				<td>
-					${weixinOrder.firstKf}
+					${weixinOrder.weixinUser.nickName}
 				</td>
 				<td>
-					${weixinOrder.remarks}
+					${weixinOrder.weixinUser.company}
 				</td>
+				<td>
+					${weixinOrder.firstKf.kfNick}
+				</td>
+
 				<td>
 					<fmt:formatDate value="${weixinOrder.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
+
+				<td>
+						${weixinOrder.remarks}
+				</td>
 				<shiro:hasPermission name="weixin:weixinOrder:edit"><td>
-    				<a href="${ctx}/weixin/weixinOrder/form?id=${weixinOrder.id}">修改</a>
+    				<a href="${ctx}/weixin/weixinOrder/detail?id=${weixinOrder.id}">查看详情</a>
 					<a href="${ctx}/weixin/weixinOrder/delete?id=${weixinOrder.id}" onclick="return confirmx('确认要删除该订单吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>

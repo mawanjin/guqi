@@ -62,7 +62,6 @@ public class WeixinCustomController extends BaseController {
 		} catch (WeiXinException e) {
 			e.printStackTrace();
 		}
-
 		return "modules/weixin/weixinCustomList";
 	}
 
